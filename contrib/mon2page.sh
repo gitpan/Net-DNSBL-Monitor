@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # mon2page.sh
-# version 1.00, 1-19-08
+# version 1.01, 2-17-08
 #
 
 if [ $# -lt 3 ]; then
@@ -15,7 +15,7 @@ if [ $# -eq 3 ]; then
   YEAR=`date +%Y`
   DAY=`date +%d`
   MON=`date +%m`
-  NAME=${YEAR}-${DAY}-${MON}
+  NAME=${YEAR}-${MON}-${DAY}  
 else
   NAME=$4
 fi
