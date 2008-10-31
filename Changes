@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.04 Wed Oct 15 15:03:50 PDT 2008
+	require Net::DNS::ToolKit version 0.41 or higher
+
 0.03  Sun Feb 17 11:54:25 PST 2008
 	fixed typo in contrib/mon2page.sh v1.01
 	that resulted in archive file names being named with the

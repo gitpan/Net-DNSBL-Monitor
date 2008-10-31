@@ -26,7 +26,7 @@ WriteMakefile(
     'NAME'		=> $pkg,
     'VERSION_FROM'	=> $module, # finds $VERSION
     'PREREQ_PM'		=> {	Net::DNS::Codes		=> 0.09,
-				Net::DNS::ToolKit	=> 0.35,
+				Net::DNS::ToolKit	=> 0.41,
 				Net::DNSBL::MultiDaemon	=> 0.22,
 				NetAddr::IP	=> 4.003,
 			},
