@@ -5,20 +5,6 @@ my $pkg = 'Net::DNSBL::Monitor';
 $pkg =~ /[^:]+$/;
 my $module = $& .'.pm';
 
-eval {
-	require Net::DNS::ToolKit;
-};
-die "prerequisite Net::DNS::ToolKit not found\n"
-	if $@;
-@_ = &Net::DNS::ToolKit::get_ns();
-if (@_) {
-  foreach(@_) {
-    print 'found nameserver ',&Net::DNS::ToolKit::inet_ntoa($_),"\n";
-  }
-} else {
-  die "resolver not configured, Net::DNSBLS::Statistics will not run\n";
-}
-
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 
@@ -33,6 +19,20 @@ WriteMakefile(
     'clean'		=> { FILES    => "*~ tmp*"},
     'dist'		=> {COMPRESS=>'gzip', SUFFIX=>'gz'}
 );
+
+eval {
+	require Net::DNS::ToolKit;
+};
+die "prerequisite Net::DNS::ToolKit not found\n"
+	if $@;
+@_ = &Net::DNS::ToolKit::get_ns();
+if (@_) {
+  foreach(@_) {
+    print 'found nameserver ',&Net::DNS::ToolKit::inet_ntoa($_),"\n";
+  }
+} else {
+  die "resolver not configured, $pkg will not run\n";
+}
 
 sub MY::top_targets {
   package MY;

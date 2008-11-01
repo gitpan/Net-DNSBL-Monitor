@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.05  Sat Nov  1 15:37:02 PST 2008
+	correct prerequisites error in Makefile.PL
+
 0.04 Wed Oct 15 15:03:50 PDT 2008
 	require Net::DNS::ToolKit version 0.41 or higher
 

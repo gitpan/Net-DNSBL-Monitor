@@ -22,7 +22,7 @@
 #
 
 use strict;
-use diagnostics;
+#use diagnostics;
 #use lib qw(blib/lib blib/arch);
 
 use Net::DNSBL::Utilities qw(
