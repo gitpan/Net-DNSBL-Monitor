@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Net-DNSBL-Monitor
-version:             0.05
+version:             0.06
 abstract:            ~
 license:             ~
 author:              ~
@@ -9,8 +9,8 @@ distribution_type:   module
 requires:     
     Net::DNS::Codes:               0.09
     Net::DNS::ToolKit:             0.41
-    Net::DNSBL::MultiDaemon:       0.22
-    NetAddr::IP:                   4.003
+    Net::DNSBL::MultiDaemon:       0.24
+    NetAddr::IP:                   4.014
 meta-spec:
     url:     http://module-build.sourceforge.net/META-spec-v1.3.html
     version: 1.3

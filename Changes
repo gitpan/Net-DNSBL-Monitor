@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.06  Sat Nov  1 17:15:11 PDT 2008
+	adjust prerequisites
+
 0.05  Sat Nov  1 15:37:02 PST 2008
 	correct prerequisites error in Makefile.PL
 

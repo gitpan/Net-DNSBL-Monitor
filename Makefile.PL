@@ -13,8 +13,8 @@ WriteMakefile(
     'VERSION_FROM'	=> $module, # finds $VERSION
     'PREREQ_PM'		=> {	Net::DNS::Codes		=> 0.09,
 				Net::DNS::ToolKit	=> 0.41,
-				Net::DNSBL::MultiDaemon	=> 0.22,
-				NetAddr::IP	=> 4.003,
+				Net::DNSBL::MultiDaemon	=> 0.24,
+				NetAddr::IP	=> 4.014,
 			},
     'clean'		=> { FILES    => "*~ tmp*"},
     'dist'		=> {COMPRESS=>'gzip', SUFFIX=>'gz'}
