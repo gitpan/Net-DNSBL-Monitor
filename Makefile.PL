@@ -11,28 +11,17 @@ my $module = $& .'.pm';
 WriteMakefile(
     'NAME'		=> $pkg,
     'VERSION_FROM'	=> $module, # finds $VERSION
-    'PREREQ_PM'		=> {	Net::DNS::Codes		=> 0.09,
+    'PREREQ_PM'		=> {
+				Net::NBsocket		=> 0.14,
+				Proc::PidUtil		=> 0.08,
+				Net::DNS::Codes		=> 0.09,
 				Net::DNS::ToolKit	=> 0.41,
 				Net::DNSBL::MultiDaemon	=> 0.24,
-				NetAddr::IP	=> 4.014,
+				NetAddr::IP		=> 4.015,
 			},
     'clean'		=> { FILES    => "*~ tmp*"},
     'dist'		=> {COMPRESS=>'gzip', SUFFIX=>'gz'}
 );
-
-eval {
-	require Net::DNS::ToolKit;
-};
-die "prerequisite Net::DNS::ToolKit not found\n"
-	if $@;
-@_ = &Net::DNS::ToolKit::get_ns();
-if (@_) {
-  foreach(@_) {
-    print 'found nameserver ',&Net::DNS::ToolKit::inet_ntoa($_),"\n";
-  }
-} else {
-  die "resolver not configured, $pkg will not run\n";
-}
 
 sub MY::top_targets {
   package MY;

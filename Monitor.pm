@@ -32,7 +32,7 @@ use vars qw(
 require Exporter;
 @ISA = qw(Exporter);
 
-$VERSION = do { my @r = (q$Revision: 0.06 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.07 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
         run
@@ -452,6 +452,11 @@ LOOP:
 	  foreach(0..$ancount-1) {
 	    ($off,$name,$t,$class,$ttl,$rdl,@rdata) = $get->next(\$msg,$off);
 	    if ($t == T_A) {
+	      if (exists $conf->{"$bl"}->{acceptany}) {
+		$ip = inet_ntoa($rdata[0]);
+		onion(\%dnsbls,\%ips,$revIP,$now + $uto,\%ipin,$bl,\%respons,$ip);
+		next LOOP;
+	      }
 	      while($answer = shift @rdata) {
 		$ip = inet_ntoa($answer);
 		if (grep($ip eq $_,keys %{$conf->{"$bl"}->{accept}})) {

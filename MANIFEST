@@ -19,6 +19,7 @@ local/iplist.txt
 local/snglips.txt
 local/tf1.txt
 local/test.conf
+t/_find_resolver.t t
 t/dnsbls.t
 t/ipfiles.t
 t/resp.t

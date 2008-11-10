@@ -1,5 +1,12 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.07  Sun Nov  9 17:34:25 PST 2008
+	Include modules in dependency list that are used in the 
+	accompanying script (daemon) but not used in the module
+
+	add 'acceptany' criteria for DNSBL
+	appease smoker test (hopefully)
+
 0.06  Sat Nov  1 17:15:11 PDT 2008
 	adjust prerequisites
 
