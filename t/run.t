@@ -49,9 +49,9 @@ select STDOUT;
 $| = 1;
 
 sub ok {
-  my $todo = $_[0] ? "# TODO $_[0]" : '';
-  print "ok $todo\n";
-#  ++$test;
+  my $comment = $_[0] || '';
+  print "ok $test $comment\n";
+  ++$test;
 }
 
 umask 027;
@@ -87,12 +87,14 @@ sub gotexp {
   }
   if ($exp =~ /\D/) {
     unless ($got eq $exp) {
-      print "got: $got\nexp: $exp\nnot ok ${test}$txt\n";
+      print "got: $got\nexp: $exp\nnot ";
+      &ok($txt);
       return;
     }
   } else {  
     unless ($got == $exp) {
-      print "got: $got, exp: $exp\nnot ok ${test}$txt\n";
+      print "got: $got, exp: $exp\nnot ";
+      &ok($txt);
       return;
     }
   }
@@ -118,7 +120,7 @@ sub chk_exp {
     $char = get1char($bp,$_);
     next if $char == $expect[$_];
     print "buffer mismatch $_, got: $char, exp: $expect[$_]\nnot ";
-    $todo = 'fix test for marginal dn_comp resolver implementations';
+    $todo = '# TODO fix test for marginal dn_comp resolver implementations';
     last;
   }
   &ok($todo);

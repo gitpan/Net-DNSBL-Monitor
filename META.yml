@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Net-DNSBL-Monitor
-version:             0.07
+version:             0.08
 abstract:            ~
 license:             ~
 author:              ~
@@ -9,7 +9,7 @@ distribution_type:   module
 requires:     
     Net::DNS::Codes:               0.09
     Net::DNS::ToolKit:             0.41
-    Net::DNSBL::MultiDaemon:       0.24
+    Net::DNSBL::MultiDaemon:       0.25
     Net::NBsocket:                 0.14
     NetAddr::IP:                   4.015
     Proc::PidUtil:                 0.08

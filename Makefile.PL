@@ -16,7 +16,7 @@ WriteMakefile(
 				Proc::PidUtil		=> 0.08,
 				Net::DNS::Codes		=> 0.09,
 				Net::DNS::ToolKit	=> 0.41,
-				Net::DNSBL::MultiDaemon	=> 0.24,
+				Net::DNSBL::MultiDaemon	=> 0.25,
 				NetAddr::IP		=> 4.015,
 			},
     'clean'		=> { FILES    => "*~ tmp*"},
