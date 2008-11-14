@@ -1,5 +1,12 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.09  Fri Nov 14 14:27:47 PST 2008
+	left out 0.08 changes notice in previous release
+	more work on t/run.t to allow for smoker testing
+
+0.08  Tue Nov 11 13:13:31 PST 2008
+	fix broken t/run.t
+
 0.07  Sun Nov  9 17:34:25 PST 2008
 	Include modules in dependency list that are used in the 
 	accompanying script (daemon) but not used in the module

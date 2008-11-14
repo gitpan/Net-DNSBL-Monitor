@@ -48,6 +48,8 @@ $| = 1;
 select STDOUT;
 $| = 1;
 
+my $skip = 'Skipped: timing variations can cause fail';
+
 sub ok {
   my $comment = $_[0] || '';
   print "ok $test $comment\n";
@@ -469,7 +471,7 @@ $exp = q|17	= {
 	},
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp);
+gotexp(Dumper(\%dnsbls),$exp,$skip);
 
 ## test 8	check send counts
 next_sec();
@@ -483,7 +485,7 @@ eval {
 
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 ## test 9	check count values
 my %qc = @rv;
@@ -494,7 +496,7 @@ $exp = q|4	= {
 	'retry-r'	=> 11,
 };
 |;
-gotexp(Dumper(\%qc),$exp);
+gotexp(Dumper(\%qc),$exp,$skip);
 
 ## test 10	check union counts
 next_sec();
@@ -508,7 +510,7 @@ eval {
 
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 sub ufix {
   my $union = shift;
@@ -535,7 +537,7 @@ $exp = q|6	= {
 	'8.1.1.1'	=> 6,
 };
 |;
-gotexp(Dumper(\%union),$exp,'Skipped, timing variations can cause fail');
+gotexp(Dumper(\%union),$exp,$skip);
 
 #################################
 ### repeat without 'in-addr.arpa'
@@ -553,7 +555,7 @@ eval {
 };
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 %dnsbls = @rv;
 $total = $dnsbls{TOTAL}->{C};
@@ -561,7 +563,7 @@ $total = $dnsbls{TOTAL}->{C};
 $exp = 8;
 print "got: $total, exp: $exp\nnot "
 	unless $total == $exp;
-&ok();
+&ok($skip);
 
 ## test 14	check array values
 $exp = q|15	= {
@@ -588,7 +590,7 @@ $exp = q|15	= {
 	},
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp);
+gotexp(Dumper(\%dnsbls),$exp,$skip);
 
 ## test 15	check send counts
 next_sec();
@@ -602,7 +604,7 @@ eval {
 
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 ## test 16	check count values
 %qc = @rv;
@@ -613,7 +615,7 @@ $exp = q|4	= {
 	'retry-r'	=> 12,
 };
 |;
-gotexp(Dumper(\%qc),$exp);
+gotexp(Dumper(\%qc),$exp,$skip);
 
 ## test 17	check union counts
 next_sec();
@@ -627,7 +629,7 @@ eval {
 
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 ## test 18	check count values
 %union = @rv;
@@ -639,7 +641,7 @@ $exp = q|4	= {
 	'8.1.1.1'	=> 4,
 };
 |;
-gotexp(Dumper(\%union),$exp,'Skipped, timing variations can cause fail');
+gotexp(Dumper(\%union),$exp,$skip);
 
 ############ re-run without debug
 ## test 19	dnsbls array
@@ -652,7 +654,7 @@ eval {
 };
 print "$@\nnot "
 	if $@;
-&ok();
+&ok($skip);
 
 my($d,$r) = @rv;
 %dnsbls = %$d;
@@ -662,7 +664,7 @@ $total = $dnsbls{TOTAL};
 $exp = 8;
 print "got: $total, exp: $exp\nnot "
 	unless $total == $exp;
-&ok();
+&ok($skip);
 
 ## test 21	check array values
 $exp = q|6	= {
@@ -674,7 +676,7 @@ $exp = q|6	= {
 	'live2.dnsbl'	=> 2,
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp);
+gotexp(Dumper(\%dnsbls),$exp,$skip);
 
 close $R;
 
@@ -701,7 +703,7 @@ $exp = q|15	= {
 	},
 };
 |;
-gotexp(Dumper($r),$exp);
+gotexp(Dumper($r),$exp,$skip);
 
 kill 15, $kid;
 

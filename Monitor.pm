@@ -32,7 +32,7 @@ use vars qw(
 require Exporter;
 @ISA = qw(Exporter);
 
-$VERSION = do { my @r = (q$Revision: 0.08 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.09 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
         run
@@ -240,7 +240,7 @@ The response hash will be of the form:
 my $w = 0;
 my @w = qw( \ | / - );
 sub whirl {
-#  return;
+  return;
   print STDERR "\r",$w[$w],"\r";
   $w = 0 if ++$w > $#w;
 }
