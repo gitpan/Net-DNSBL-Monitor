@@ -1,5 +1,14 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.10  Sun Nov 16 16:39:23 PST 2008
+	further revisions to t/run.t for smoker tests
+
+	update to support INCLUDE keys in the config file
+
+  NOTE: dnsblmon has been updated to support INCLUDE keys.
+	you must update your dnsblmon script if you wish
+	to use this feature.
+
 0.09  Fri Nov 14 14:27:47 PST 2008
 	left out 0.08 changes notice in previous release
 	more work on t/run.t to allow for smoker testing

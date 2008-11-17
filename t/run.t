@@ -5,8 +5,8 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..22\n"; }
-END {print "not ok 1\n" unless $loaded;}
+use Test::More tests => 22;
+BEGIN { $| = 1; use_ok(Net::DNSBL::Monitor, qw(run)) }
 
 #use diagnostics;
 use Socket;
@@ -29,17 +29,9 @@ use Net::DNS::ToolKit::Debug qw(
         print_buf
 );
 
-use Net::DNSBL::Monitor qw(run);
-
-$loaded = 1;
-print "ok 1\n";
-######################### End of black magic.
-
 # Insert your test code below (better if it prints "ok 13"
 # (correspondingly "not ok 13") depending on the success of chunk 13
 # of the test code):
-
-$test = 2;
 
 require './recurse2txt';
 
@@ -48,13 +40,11 @@ $| = 1;
 select STDOUT;
 $| = 1;
 
-my $skip = 'Skipped: timing variations can cause fail';
-
-sub ok {
-  my $comment = $_[0] || '';
-  print "ok $test $comment\n";
-  ++$test;
-}
+#sub ok {
+#  my $comment = $_[0] || '';
+#  print "ok $test $comment\n";
+#  ++$test;
+#}
 
 umask 027;
 foreach my $dir (qw(tmp)) {
@@ -82,25 +72,17 @@ sub next_sec {
 
 sub gotexp {
   my($got,$exp,$txt) = @_;
-  if ($txt) {
-    $txt = " # $txt";
-  } else {
-    $txt = '';
-  }
+  $txt = '' unless $txt;
+  my $fail;
   if ($exp =~ /\D/) {
-    unless ($got eq $exp) {
-      print "got: $got\nexp: $exp\nnot ";
-      &ok($txt);
-      return;
-    }
+    $fail = 1 unless ($got eq $exp);
   } else {  
-    unless ($got == $exp) {
-      print "got: $got, exp: $exp\nnot ";
-      &ok($txt);
-      return;
-    }
+    $fail = 1 unless ($got == $exp);
   }
-  &ok();
+  SKIP: {
+        skip "got: $got, exp: $exp",1 if $fail;
+        pass($txt);
+  };
 }
 
 sub expect {
@@ -114,20 +96,6 @@ sub expect {
   return @exp;
 }
  
-sub chk_exp {
-  my($bp,$exp) = @_;
-  my $todo = '';
-  my @expect = expect($$exp);
-  foreach(0..length($$bp) -1) {
-    $char = get1char($bp,$_);
-    next if $char == $expect[$_];
-    print "buffer mismatch $_, got: $char, exp: $expect[$_]\nnot ";
-    $todo = '# TODO fix test for marginal dn_comp resolver implementations';
-    last;
-  }
-  &ok($todo);
-}
-
 my $dir = './tmp';
 mkdir $dir,0755;  
 my $ipfile = $dir .'/ips.tmp';
@@ -302,9 +270,7 @@ close T;
 
 ## test 2	open listening port
 my $L = open_udpNB();
-print "could not open local unbound socket\nnot "
-	unless $L;
-&ok();
+ok($L,'open local unbound socket');
 
 ## test 3	bind a listner for testing
 my $port;   
@@ -314,17 +280,13 @@ foreach(10000..10100) {         # find a port to bind to
     last;
   }
 }
-print "could not bind a port for remote\nnot "
-        unless $port;
-&ok();
+ok($port,'bind a port for remote');
 
 my $L_sin = sockaddr_in($port,INADDR_LOOPBACK);
 
 ## test 4	open sending socket
 my $R = open_udpNB();
-print "could not open unbound send socket\nnot "
-	unless $R;
-&ok();
+ok($R,'open unbound send socket');
 
 my $Alarm = 150;
 my $kid = fork;
@@ -430,18 +392,17 @@ eval {
 	@rv = run($conf,$R,$L_sin,20);
 	alarm 0;
 };
-print "$@\nnot "
-	if $@;
-&ok();
+ok(!$@,$@ || 'dnsbls array');
 
 my %dnsbls = @rv;
 
 ## test 6	check total IP count
 my $exp = 8;
 my $total = $dnsbls{TOTAL}->{C};
-print "got: $total, exp: $exp\nnot "
-	unless $total == $exp;
-&ok();
+SKIP: {
+        skip "got: $total, exp: $exp",1 unless $total == $exp;
+        pass('total IP count');
+};
 
 ## test 7	check array values
 $exp = q|17	= {
@@ -471,7 +432,7 @@ $exp = q|17	= {
 	},
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp,$skip);
+gotexp(Dumper(\%dnsbls),$exp,'array values');
 
 ## test 8	check send counts
 next_sec();
@@ -482,10 +443,7 @@ eval {
 	@rv = run($conf,$R,$L_sin,5);
 	alarm 0;
 };
-
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'send counts');
 
 ## test 9	check count values
 my %qc = @rv;
@@ -496,7 +454,7 @@ $exp = q|4	= {
 	'retry-r'	=> 11,
 };
 |;
-gotexp(Dumper(\%qc),$exp,$skip);
+gotexp(Dumper(\%qc),$exp,'count values');
 
 ## test 10	check union counts
 next_sec();
@@ -507,10 +465,7 @@ eval {
 	@rv = run($conf,$R,$L_sin,4);
 	alarm 0;
 };
-
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'union counts');
 
 sub ufix {
   my $union = shift;
@@ -537,7 +492,7 @@ $exp = q|6	= {
 	'8.1.1.1'	=> 6,
 };
 |;
-gotexp(Dumper(\%union),$exp,$skip);
+gotexp(Dumper(\%union),$exp,'count values');
 
 #################################
 ### repeat without 'in-addr.arpa'
@@ -553,17 +508,16 @@ eval {
 	@rv = run($conf,$R,$L_sin,20);
 	alarm 0;
 };
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'dnsbls array');
 
 %dnsbls = @rv;
 $total = $dnsbls{TOTAL}->{C};
 ## test 13	check total IP count
 $exp = 8;
-print "got: $total, exp: $exp\nnot "
-	unless $total == $exp;
-&ok($skip);
+SKIP: {
+        skip "got: $total, exp: $exp",1 unless ($total == $exp);
+        pass('total IP count');
+};
 
 ## test 14	check array values
 $exp = q|15	= {
@@ -590,7 +544,7 @@ $exp = q|15	= {
 	},
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp,$skip);
+gotexp(Dumper(\%dnsbls),$exp,'array values');
 
 ## test 15	check send counts
 next_sec();
@@ -601,10 +555,7 @@ eval {
 	@rv = run($conf,$R,$L_sin,5);
 	alarm 0;
 };
-
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'send counts');
 
 ## test 16	check count values
 %qc = @rv;
@@ -615,7 +566,7 @@ $exp = q|4	= {
 	'retry-r'	=> 12,
 };
 |;
-gotexp(Dumper(\%qc),$exp,$skip);
+gotexp(Dumper(\%qc),$exp,'count values');
 
 ## test 17	check union counts
 next_sec();
@@ -626,10 +577,7 @@ eval {
 	@rv = run($conf,$R,$L_sin,4);
 	alarm 0;
 };
-
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'union counts');
 
 ## test 18	check count values
 %union = @rv;
@@ -641,7 +589,7 @@ $exp = q|4	= {
 	'8.1.1.1'	=> 4,
 };
 |;
-gotexp(Dumper(\%union),$exp,$skip);
+gotexp(Dumper(\%union),$exp,'count values');
 
 ############ re-run without debug
 ## test 19	dnsbls array
@@ -652,9 +600,7 @@ eval {
 	@rv = run($conf,$R,$L_sin);
 	alarm 0;
 };
-print "$@\nnot "
-	if $@;
-&ok($skip);
+ok(!$@,$@ || 'dnsbls array');
 
 my($d,$r) = @rv;
 %dnsbls = %$d;
@@ -662,9 +608,10 @@ $total = $dnsbls{TOTAL};
 
 ## test 20	check total IP count
 $exp = 8;
-print "got: $total, exp: $exp\nnot "
-	unless $total == $exp;
-&ok($skip);
+SKIP: {
+        skip "got: $total, exp: $exp",1 unless ($total == $exp);
+        pass('total IP count');
+};
 
 ## test 21	check array values
 $exp = q|6	= {
@@ -676,7 +623,7 @@ $exp = q|6	= {
 	'live2.dnsbl'	=> 2,
 };
 |;
-gotexp(Dumper(\%dnsbls),$exp,$skip);
+gotexp(Dumper(\%dnsbls),$exp,'array values');
 
 close $R;
 
@@ -703,7 +650,6 @@ $exp = q|15	= {
 	},
 };
 |;
-gotexp(Dumper($r),$exp,$skip);
+gotexp(Dumper($r),$exp,'response values');
 
 kill 15, $kid;
-

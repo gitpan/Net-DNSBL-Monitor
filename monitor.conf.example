@@ -1,8 +1,15 @@
 #
 # monitor.conf.sample
-# version 1.01,	1-22-08,	michael@bizsystems.com
+# version 1.02,	11-16-08,	michael@bizsystems.com
 #
 my $conf = {
+#
+## additional KEYS may be included with an INCLUDE statement of the form:
+#
+#  INCLUDE => 'path/to/file.conf',
+#
+#  this file may include an INCLUDE statement, as may the next, etc...
+#
 #
 # Directory to store PID file
 #
@@ -215,8 +222,6 @@ my $conf = {
 # working, sample file entries
 
   'bl.spamcannibal.org'	=> {
-  #	acceptany => 'accept any response from this DNSBL',
-  #  or
 	accept	=> {
 		'127.0.0.2'  => 'rejected host',
 	},
@@ -244,6 +249,8 @@ my $conf = {
   },
 
   'dnsbl.sorbs.net'	=> {	# see http://www.dnsbl.sorbs.net/using.html
+#	acceptany   => 'comment - treat any response as valid',
+#     or
 	accept	=> {	# list of codes for which we tarpit
 		'127.0.0.2'  =>	'open http proxie',
 		'127.0.0.3'  =>	'open socks proxie',

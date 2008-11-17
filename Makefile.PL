@@ -16,8 +16,9 @@ WriteMakefile(
 				Proc::PidUtil		=> 0.08,
 				Net::DNS::Codes		=> 0.09,
 				Net::DNS::ToolKit	=> 0.41,
-				Net::DNSBL::MultiDaemon	=> 0.25,
+				Net::DNSBL::MultiDaemon	=> 0.26,
 				NetAddr::IP		=> 4.015,
+				Test::More		=> 0,
 			},
     'clean'		=> { FILES    => "*~ tmp*"},
     'dist'		=> {COMPRESS=>'gzip', SUFFIX=>'gz'}

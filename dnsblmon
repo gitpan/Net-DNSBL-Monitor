@@ -2,7 +2,7 @@
 #
 # dnsblmon
 #
-# version 1.01, 1-19-08
+# version 1.02, 11-16-08
 #
 # Copyright 2008, Michael Robinton <michael@bizsystems.com>
    
@@ -26,7 +26,7 @@ use strict;
 #use lib qw(blib/lib blib/arch);
 
 use Net::DNSBL::Utilities qw(
-	DO
+	doINCLUDE
 );
 use Net::NBsocket qw(
 	open_udpNB
@@ -180,14 +180,14 @@ unless ($SOUT) {
 }
 
 usage() unless $config;
-my $Conf = DO($config);
+my $Conf = doINCLUDE($config);
 usage("could not load config file: $config")
 	unless $Conf;
 usage("corrupted config file: $config")
 	unless (@ckys = keys %$Conf);
 
 if (exists $Conf->{IMPORT} && (my $sconf = $Conf->{IMPORT}->{FILE})) {
-  my $Sconf = DO($sconf);
+  my $Sconf = doINCLUDE($sconf);
   usage("could not load spamcannibal config file: $sconf")
 	unless $Sconf;
   usage("corrupted spamcannibal config file: $sconf")
