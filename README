@@ -32,6 +32,10 @@ CONFIGURATION FILE
     The sample configuration file monitor.conf.sample is heavily commented
     with the details for each configuration element.
 
+    A useful list of DNSBL zones for the config file (put together by
+    "Andrey V. Stolyarov" <croco-gnu@openwall.com>) maybe found in the
+    contrib directory "zones4config.file".
+
 SYSTEM SIGNALS
     dnsblmon responds to the following system signals:
 
@@ -102,7 +106,7 @@ dnsblmon usage
 
       -r -s would produce the report on STDOUT and the statistics
             on STDERR.
-      -s -r would produce the statistics on STOUT and the 
+      -s -r would produce the statistics on STDOUT and the 
             report on STDERR.
 
       -s outfile1 -r outfile2 would write the statistics and report

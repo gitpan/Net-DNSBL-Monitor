@@ -32,7 +32,7 @@ use vars qw(
 require Exporter;
 @ISA = qw(Exporter);
 
-$VERSION = do { my @r = (q$Revision: 0.10 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+$VERSION = do { my @r = (q$Revision: 0.11 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 @EXPORT_OK = qw(
         run
@@ -91,6 +91,10 @@ facilitating common maintenance of DNSBL's for your MTA installation.
 The sample configuration file
 B<monitor.conf.sample> is heavily commented with the details for each
 configuration element.
+
+A useful list of DNSBL zones for the config file (put together by 
+"Andrey V. Stolyarov" <croco-gnu@openwall.com>)
+maybe found in the B<contrib> directory C<zones4config.file>.
 
 =head1 SYSTEM SIGNALS
 
@@ -175,7 +179,7 @@ The -r and -s switchs are position dependent output designators.
 
   -r -s would produce the report on STDOUT and the statistics
 	on STDERR.
-  -s -r would produce the statistics on STOUT and the 
+  -s -r would produce the statistics on STDOUT and the 
 	report on STDERR.
 
   -s outfile1 -r outfile2 would write the statistics and report
@@ -452,18 +456,18 @@ LOOP:
 	  foreach(0..$ancount-1) {
 	    ($off,$name,$t,$class,$ttl,$rdl,@rdata) = $get->next(\$msg,$off);
 	    if ($t == T_A) {
-	      if (exists $conf->{"$bl"}->{acceptany}) {
-		$ip = inet_ntoa($rdata[0]);
-		onion(\%dnsbls,\%ips,$revIP,$now + $uto,\%ipin,$bl,\%respons,$ip);
-		next LOOP;
-	      }
-	      while($answer = shift @rdata) {
+	      foreach $answer (@rdata) {
 		$ip = inet_ntoa($answer);
 		if (grep($ip eq $_,keys %{$conf->{"$bl"}->{accept}})) {
 		  onion(\%dnsbls,\%ips,$revIP,$now + $uto,\%ipin,$bl,\%respons,$ip);
 #print STDERR "FAILED $name $ip\n";
 		  next LOOP;
 		}
+	      }
+	      if (exists $conf->{"$bl"}->{acceptany}) {
+		$ip = inet_ntoa($rdata[0]);
+		onion(\%dnsbls,\%ips,$revIP,$now + $uto,\%ipin,$bl,\%respons,$ip);
+		next LOOP;
 	      }
 	    }
 	    elsif ($needPTR && $t == T_PTR && exists $dnsbls{GENERIC}) {

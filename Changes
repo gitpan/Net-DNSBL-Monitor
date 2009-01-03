@@ -1,5 +1,11 @@
 Revision history for Perl extension Net::DNSBL::Monitor
 
+0.11  Sat Jan  3 13:06:31 PST 2009
+	update 'aceptany' feature to return the comments 
+	associated with the accepted key
+	Thanks to "Andrey V. Stolyarov" <croco-gnu@openwall.com>
+	for the idea and patch.
+
 0.10  Sun Nov 16 16:39:23 PST 2008
 	further revisions to t/run.t for smoker tests
 
